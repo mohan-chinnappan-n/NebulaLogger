@@ -490,6 +490,76 @@ global with sharing class LogEntryEventBuilder {
     }
 
     /**
+     * @description Sets the log entry event's record fields
+     * @param  records The set of `SObject` records related to the entry. The JSON of the set is automatically added to the entry
+     * @return         The same instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global LogEntryEventBuilder setRecord(Set<SObject> records) {
+        if (this.shouldSave == false) {
+            return this;
+        }
+
+        this.logEntryEvent.RecordCollectionSize__c = records?.size();
+        this.logEntryEvent.RecordCollectionType__c = 'Set';
+
+        // Sets don't work with some other methods, so internally the set is converted to a list & used as needed
+        List<SObject> recordsList = records == null ? null : new List<SObject>(records);
+        Schema.SObjectType sobjectType = records?.size() > 0 ? recordsList.get(0)?.getSObjectType() : null;
+        String recordJson = getJson(recordsList);
+        if (sobjectType == null) {
+            this.logEntryEvent.RecordJson__c = recordJson;
+            this.logEntryEvent.RecordSObjectClassification__c = 'Unknown';
+            this.logEntryEvent.RecordSObjectType__c = 'Unknown';
+        } else {
+            String cleanedRecordJson = applyDataMaskRules(recordJson, false, true);
+            Boolean recordJsonMasked = cleanedRecordJson != recordJson;
+
+            this.logEntryEvent.RecordJson__c = cleanedRecordJson;
+            this.logEntryEvent.RecordJsonMasked__c = recordJsonMasked;
+            this.logEntryEvent.RecordSObjectClassification__c = getSObjectClassification(sobjectType);
+            this.logEntryEvent.RecordSObjectType__c = sobjectType.getDescribe().getName();
+            this.logEntryEvent.RecordSObjectTypeNamespace__c = getSObjectTypeNamespace(sobjectType);
+        }
+
+        return this;
+    }
+
+    /**
+     * @description Sets the log entry event's record fields
+     * @param  recordIdToRecord The map of `SObject` records related to the entry. The JSON of the map is automatically added to the entry
+     * @return                  The same instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global LogEntryEventBuilder setRecord(Map<Id, SObject> recordIdToRecord) {
+        if (this.shouldSave == false) {
+            return this;
+        }
+
+        this.logEntryEvent.RecordCollectionSize__c = recordIdToRecord?.size();
+        this.logEntryEvent.RecordCollectionType__c = 'Map';
+
+        // Sets don't work with some other methods, so internally the set is converted to a list & used as needed
+        List<SObject> recordsList = recordIdToRecord?.values();
+        Schema.SObjectType sobjectType = recordIdToRecord?.size() > 0 ? recordsList.get(0)?.getSObjectType() : null;
+        String recordJson = getJson(recordIdToRecord);
+        if (sobjectType == null) {
+            this.logEntryEvent.RecordJson__c = recordJson;
+            this.logEntryEvent.RecordSObjectClassification__c = 'Unknown';
+            this.logEntryEvent.RecordSObjectType__c = 'Unknown';
+        } else {
+            String cleanedRecordJson = applyDataMaskRules(recordJson, false, true);
+            Boolean recordJsonMasked = cleanedRecordJson != recordJson;
+
+            this.logEntryEvent.RecordJson__c = cleanedRecordJson;
+            this.logEntryEvent.RecordJsonMasked__c = recordJsonMasked;
+            this.logEntryEvent.RecordSObjectClassification__c = getSObjectClassification(sobjectType);
+            this.logEntryEvent.RecordSObjectType__c = sobjectType.getDescribe().getName();
+            this.logEntryEvent.RecordSObjectTypeNamespace__c = getSObjectTypeNamespace(sobjectType);
+        }
+
+        return this;
+    }
+
+    /**
      * @description Sets the log entry event's HTTP Request fields
      * @param  request The instance of `HttpRequest` to log
      * @return              The same instance of `LogEntryEventBuilder`, useful for chaining methods
@@ -840,13 +910,39 @@ global with sharing class LogEntryEventBuilder {
     }
 
     private static String getJson(SObject record) {
+        if (record == null) {
+            return null;
+        }
+
         SObject strippedRecord = stripInaccessible(new List<SObject>{ record }).get(0);
         return truncateFieldValue(Schema.LogEntryEvent__e.RecordJson__c, JSON.serializePretty(strippedRecord));
     }
 
     private static String getJson(List<SObject> records) {
+        if (records == null) {
+            return null;
+        }
+
         List<SObject> strippedRecords = stripInaccessible(records);
         return truncateFieldValue(Schema.LogEntryEvent__e.RecordJson__c, JSON.serializePretty(strippedRecords));
+    }
+
+    private static String getJson(Map<Id, SObject> recordIdToRecord) {
+        if (recordIdToRecord == null) {
+            return null;
+        }
+
+        List<SObject> records = recordIdToRecord.values();
+        List<SObject> strippedRecords = stripInaccessible(records);
+        Map<String, SObject> strippedRecordIdToRecord = new Map<String, SObject>();
+        for (SObject record : strippedRecords) {
+            String recordId = record?.Id;
+            if (recordId == null) {
+                recordId = '';
+            }
+            strippedRecordIdToRecord.put(recordId, record);
+        }
+        return truncateFieldValue(Schema.LogEntryEvent__e.RecordJson__c, JSON.serializePretty(strippedRecordIdToRecord));
     }
 
     private static String getOrganizationEnvironmentType() {

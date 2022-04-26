@@ -519,7 +519,7 @@ private class LogEntryEventBuilder_Tests {
         System.assertEquals(1, builder.getLogEntryEvent().RecordCollectionSize__c);
         System.assertEquals('Single', builder.getLogEntryEvent().RecordCollectionType__c);
         System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
-        System.assertEquals('null', builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
         System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectClassification__c);
         System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectType__c);
         System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
@@ -627,9 +627,10 @@ private class LogEntryEventBuilder_Tests {
         System.assertEquals(null, users);
         builder.setRecord(users);
 
+        System.assertEquals(null, builder.getLogEntryEvent().RecordCollectionSize__c);
         System.assertEquals('List', builder.getLogEntryEvent().RecordCollectionType__c);
         System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
-        System.assertEquals('null', builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
         System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectClassification__c);
         System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectType__c);
     }
@@ -647,6 +648,7 @@ private class LogEntryEventBuilder_Tests {
         System.assertEquals(true, users.isEmpty());
         builder.setRecord(users);
 
+        System.assertEquals(users.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
         System.assertEquals('List', builder.getLogEntryEvent().RecordCollectionType__c);
         System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
         System.assertEquals(JSON.serializePretty(users), builder.getLogEntryEvent().RecordJson__c);
@@ -669,6 +671,7 @@ private class LogEntryEventBuilder_Tests {
         users.add(new User(Id = UserInfo.getUserId()));
         builder.setRecord(users);
 
+        System.assertEquals(users.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
         System.assertEquals('List', builder.getLogEntryEvent().RecordCollectionType__c);
         System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
         System.assertEquals(JSON.serializePretty(users), builder.getLogEntryEvent().RecordJson__c);
@@ -688,9 +691,181 @@ private class LogEntryEventBuilder_Tests {
         List<User> users = [SELECT Id, Name, Username, IsActive FROM User LIMIT 5];
         builder.setRecord(users);
 
+        System.assertEquals(users.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
         System.assertEquals('List', builder.getLogEntryEvent().RecordCollectionType__c);
         System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
         System.assertEquals(JSON.serializePretty(users), builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals('Standard Object', builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(User.SObjectType.getDescribe().getName(), builder.getLogEntryEvent().RecordSObjectType__c);
+    }
+
+    @IsTest
+    static void it_should_set_record_fields_for_set_of_records_when_set_is_null() {
+        LogEntryEventBuilder builder = new LogEntryEventBuilder(LoggingLevel.INFO, true);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
+
+        Set<SObject> users;
+        System.assertEquals(null, users);
+        builder.setRecord(users);
+
+        System.assertEquals(null, builder.getLogEntryEvent().RecordCollectionSize__c);
+        System.assertEquals('Set', builder.getLogEntryEvent().RecordCollectionType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectType__c);
+    }
+
+    @IsTest
+    static void it_should_set_record_fields_for_set_of_records_when_set_is_empty() {
+        LogEntryEventBuilder builder = new LogEntryEventBuilder(LoggingLevel.INFO, true);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
+
+        Set<SObject> users = new Set<SObject>();
+        System.assertEquals(true, users.isEmpty());
+        builder.setRecord(users);
+
+        System.assertEquals(users.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
+        System.assertEquals('Set', builder.getLogEntryEvent().RecordCollectionType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(users), builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectType__c);
+    }
+
+    @IsTest
+    static void it_should_set_record_fields_for_set_of_records_when_first_record_is_null() {
+        LogEntryEventBuilder builder = new LogEntryEventBuilder(LoggingLevel.INFO, true);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
+
+        Set<SObject> users = new Set<SObject>();
+        User nullUser;
+        users.add(nullUser);
+        users.add(new User(Id = UserInfo.getUserId()));
+        builder.setRecord(users);
+
+        System.assertEquals(users.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
+        System.assertEquals('Set', builder.getLogEntryEvent().RecordCollectionType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(users), builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectType__c);
+    }
+
+    @IsTest
+    static void it_should_set_record_fields_for_set_of_records_when_populated() {
+        LogEntryEventBuilder builder = new LogEntryEventBuilder(LoggingLevel.INFO, true);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
+
+        Set<SObject> users = new Set<SObject>((List<SObject>) [SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        builder.setRecord(users);
+
+        System.assertEquals(users.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
+        System.assertEquals('Set', builder.getLogEntryEvent().RecordCollectionType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(users), builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals('Standard Object', builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(User.SObjectType.getDescribe().getName(), builder.getLogEntryEvent().RecordSObjectType__c);
+    }
+
+    @IsTest
+    static void it_should_set_record_fields_for_map_of_records_when_map_is_null() {
+        LogEntryEventBuilder builder = new LogEntryEventBuilder(LoggingLevel.INFO, true);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
+
+        Map<Id, SObject> userIdToUser;
+        System.assertEquals(null, userIdToUser);
+        builder.setRecord(userIdToUser);
+
+        System.assertEquals(null, builder.getLogEntryEvent().RecordCollectionSize__c);
+        System.assertEquals('Map', builder.getLogEntryEvent().RecordCollectionType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectType__c);
+    }
+
+    @IsTest
+    static void it_should_set_record_fields_for_map_of_records_when_map_is_empty() {
+        LogEntryEventBuilder builder = new LogEntryEventBuilder(LoggingLevel.INFO, true);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
+
+        Map<Id, SObject> userIdToUser = new Map<Id, SObject>();
+        System.assertEquals(true, userIdToUser.isEmpty());
+        builder.setRecord(userIdToUser);
+
+        System.assertEquals(userIdToUser.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
+        System.assertEquals('Map', builder.getLogEntryEvent().RecordCollectionType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectType__c);
+    }
+
+    @IsTest
+    static void it_should_set_record_fields_for_map_of_records_when_first_record_is_null() {
+        LogEntryEventBuilder builder = new LogEntryEventBuilder(LoggingLevel.INFO, true);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
+
+        Map<Id, SObject> userIdToUser = new Map<Id, SObject>();
+        User nullUser;
+        userIdToUser.put(null, nullUser);
+        userIdToUser.put(UserInfo.getUserId(), new User(Id = UserInfo.getUserId()));
+        builder.setRecord(userIdToUser);
+
+        String expectedJson = JSON.serializePretty(new Map<String, SObject>{ '' => nullUser, UserInfo.getUserId() => new User(Id = UserInfo.getUserId()) });
+        System.assertEquals(userIdToUser.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
+        System.assertEquals('Map', builder.getLogEntryEvent().RecordCollectionType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(expectedJson, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals('Unknown', builder.getLogEntryEvent().RecordSObjectType__c);
+    }
+
+    @IsTest
+    static void it_should_set_record_fields_for_map_of_records_when_populated() {
+        LogEntryEventBuilder builder = new LogEntryEventBuilder(LoggingLevel.INFO, true);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectClassification__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordSObjectTypeNamespace__c);
+
+        Map<Id, SObject> userIdToUser = new Map<Id, SObject>([SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        builder.setRecord(userIdToUser);
+
+        System.assertEquals(userIdToUser.size(), builder.getLogEntryEvent().RecordCollectionSize__c);
+        System.assertEquals('Map', builder.getLogEntryEvent().RecordCollectionType__c);
+        System.assertEquals(null, builder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), builder.getLogEntryEvent().RecordJson__c);
         System.assertEquals('Standard Object', builder.getLogEntryEvent().RecordSObjectClassification__c);
         System.assertEquals(User.SObjectType.getDescribe().getName(), builder.getLogEntryEvent().RecordSObjectType__c);
     }
