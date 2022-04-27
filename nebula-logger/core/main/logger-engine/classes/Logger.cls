@@ -479,6 +479,68 @@ global with sharing class Logger {
 
     /**
      * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  logMessage       The instance of `LogMessage` to use to set the entry's message field
+     * @param  recordIdToRecord The map of `SObject` records to log
+     * @param  apexException    The instance of `Exception` to log
+     * @return                  The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(LogMessage logMessage, Map<Id, SObject> recordIdToRecord, Exception apexException) {
+        return error().setRecord(recordIdToRecord).setExceptionDetails(apexException).setMessage(logMessage);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  logMessage       The instance of `LogMessage` to use to set the entry's message field
+     * @param  recordIdToRecord The map of `SObject` records to log
+     * @return                  The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(LogMessage logMessage, Map<Id, SObject> recordIdToRecord) {
+        return error().setRecord(recordIdToRecord).setMessage(logMessage);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  logMessage    The instance of `LogMessage` to use to set the entry's message field
+     * @param  records       The set of `SObject` records to log
+     * @param  apexException The instance of `Exception` to log
+     * @return               The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(LogMessage logMessage, Set<SObject> records, Exception apexException) {
+        return error().setRecord(records).setExceptionDetails(apexException).setMessage(logMessage);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  logMessage The instance of `LogMessage` to use to set the entry's message field
+     * @param  records    The set of `SObject` records to log
+     * @return            The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(LogMessage logMessage, Set<SObject> records) {
+        return error().setRecord(records).setMessage(logMessage);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  logMessage  The instance of `LogMessage` to use to set the entry's message field
+     * @param  httpRequest The instance of `HttpRequest` to log
+     * @return             The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(LogMessage logMessage, HttpRequest httpRequest) {
+        return error().setHttpRequestDetails(httpRequest).setMessage(logMessage);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  logMessage   The instance of `LogMessage` to use to set the entry's message field
+     * @param  httpResponse The instance of `HttpResponse` to log
+     * @return              The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(LogMessage logMessage, HttpResponse httpResponse) {
+        return error().setHttpResponseDetails(httpResponse).setMessage(logMessage);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
      * @param  logMessage The instance of `LogMessage` to use to set the entry's message field
      * @return            The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
      */
@@ -657,6 +719,68 @@ global with sharing class Logger {
      */
     global static LogEntryEventBuilder error(String message, List<SObject> records) {
         return error().setRecord(records).setMessage(message);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  message          The instance of `LogMessage` to use to set the entry's message field
+     * @param  recordIdToRecord The map of `SObject` records to log
+     * @param  apexException    The instance of `Exception` to log
+     * @return                  The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(String message, Map<Id, SObject> recordIdToRecord, Exception apexException) {
+        return error().setRecord(recordIdToRecord).setExceptionDetails(apexException).setMessage(message);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  message          The string to use to set the entry's message field
+     * @param  recordIdToRecord The map of `SObject` records to log
+     * @return                  The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(String message, Map<Id, SObject> recordIdToRecord) {
+        return error().setRecord(recordIdToRecord).setMessage(message);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  message    The instance of `LogMessage` to use to set the entry's message field
+     * @param  records       The set of `SObject` records to log
+     * @param  apexException The instance of `Exception` to log
+     * @return               The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(String message, Set<SObject> records, Exception apexException) {
+        return error().setRecord(records).setExceptionDetails(apexException).setMessage(message);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  message The string to use to set the entry's message field
+     * @param  records The set of `SObject` records to log
+     * @return         The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(String message, Set<SObject> records) {
+        return error().setRecord(records).setMessage(message);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  message     The string to use to set the entry's message field
+     * @param  httpRequest The instance of `HttpRequest` to log
+     * @return             The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(String message, HttpRequest httpRequest) {
+        return error().setHttpRequestDetails(httpRequest).setMessage(message);
+    }
+
+    /**
+     * @description Creates a new log entry with logging level == `LoggingLevel.ERROR`
+     * @param  message     The string to use to set the entry's message field
+     * @param  httpResponse The instance of `HttpResponse` to log
+     * @return             The new entry's instance of `LogEntryEventBuilder`, useful for chaining methods
+     */
+    global static LogEntryEventBuilder error(String message, HttpResponse httpResponse) {
+        return error().setHttpResponseDetails(httpResponse).setMessage(message);
     }
 
     /**

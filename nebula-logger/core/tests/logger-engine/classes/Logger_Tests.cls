@@ -220,9 +220,7 @@ private class Logger_Tests {
         LoggingLevel expectedValue = LoggingLevel.FINE;
         Logger.getUserSettings().LoggingLevel__c = expectedValue.name();
 
-        Test.startTest();
         LoggingLevel returnedValue = Logger.getUserLoggingLevel();
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -230,14 +228,9 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_true_when_enabled() {
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
 
         Boolean returnedValue = Logger.isEnabled();
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -246,15 +239,10 @@ private class Logger_Tests {
     static void it_should_return_true_when_provided_logging_level_is_enabled() {
         LoggingLevel loggingLevel = LoggingLevel.FINE;
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
         Logger.getUserSettings().LoggingLevel__c = loggingLevel.name();
 
         Boolean returnedValue = Logger.isEnabled(loggingLevel);
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -262,15 +250,10 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_true_when_error_logging_level_is_enabled() {
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
         Logger.getUserSettings().LoggingLevel__c = LoggingLevel.ERROR.name();
 
         Boolean returnedValue = Logger.isErrorEnabled();
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -278,15 +261,10 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_true_when_warn_logging_level_is_enabled() {
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
         Logger.getUserSettings().LoggingLevel__c = LoggingLevel.WARN.name();
 
         Boolean returnedValue = Logger.isWarnEnabled();
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -294,15 +272,10 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_true_when_info_logging_level_is_enabled() {
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
         Logger.getUserSettings().LoggingLevel__c = LoggingLevel.INFO.name();
 
         Boolean returnedValue = Logger.isInfoEnabled();
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -310,15 +283,10 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_true_when_debug_logging_level_is_enabled() {
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
         Logger.getUserSettings().LoggingLevel__c = LoggingLevel.DEBUG.name();
 
         Boolean returnedValue = Logger.isDebugEnabled();
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -326,15 +294,10 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_true_when_fine_logging_level_is_enabled() {
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
         Logger.getUserSettings().LoggingLevel__c = LoggingLevel.FINE.name();
 
         Boolean returnedValue = Logger.isFineEnabled();
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -342,15 +305,10 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_true_when_finer_logging_level_is_enabled() {
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
         Logger.getUserSettings().LoggingLevel__c = LoggingLevel.FINER.name();
 
         Boolean returnedValue = Logger.isFinerEnabled();
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -358,15 +316,10 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_true_when_finest_logging_level_is_enabled() {
         Boolean expectedValue = true;
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = expectedValue;
         Logger.getUserSettings().LoggingLevel__c = LoggingLevel.FINEST.name();
 
         Boolean returnedValue = Logger.isFinestEnabled();
-
-        Test.stopTest();
 
         System.assertEquals(expectedValue, returnedValue);
     }
@@ -375,9 +328,7 @@ private class Logger_Tests {
     static void it_should_return_true_when_saving_is_suspended() {
         System.assertEquals(false, Logger.isSavingSuspended());
 
-        Test.startTest();
         Logger.suspendSaving();
-        Test.stopTest();
 
         System.assertEquals(true, Logger.isSavingSuspended());
     }
@@ -386,18 +337,12 @@ private class Logger_Tests {
     static void it_should_suspend_saving() {
         Integer countOfExistingLogEntries = [SELECT COUNT() FROM LogEntry__c];
         System.assertEquals(0, countOfExistingLogEntries);
-
-        Test.startTest();
-
         Logger.getUserSettings().IsEnabled__c = true;
         Logger.getUserSettings().LoggingLevel__c = LoggingLevel.DEBUG.name();
 
         Logger.suspendSaving();
-
         Logger.debug('test log entry');
         Logger.saveLog();
-
-        Test.stopTest();
 
         countOfExistingLogEntries = [SELECT COUNT() FROM LogEntry__c];
         System.assertEquals(0, countOfExistingLogEntries);
@@ -481,15 +426,10 @@ private class Logger_Tests {
     @IsTest
     static void it_should_return_the_buffer_size() {
         System.assertEquals(0, Logger.getBufferSize());
-
         setUserLoggingLevel(LoggingLevel.DEBUG);
-
-        Test.startTest();
 
         Logger.debug('test log entry');
         Logger.warn('another test log entry');
-
-        Test.stopTest();
 
         System.assertEquals(2, Logger.getBufferSize());
     }
@@ -498,28 +438,21 @@ private class Logger_Tests {
     static void it_should_not_save_when_saving_is_disabled() {
         Integer countOfLogEntries = [SELECT COUNT() FROM LogEntry__c];
         System.assertEquals(0, countOfLogEntries);
-
         setUserLoggingLevel(LoggingLevel.DEBUG);
-
         Logger.getUserSettings().IsSavingEnabled__c = false;
-
         System.assertEquals(Logger.SaveMethod.EVENT_BUS, Logger.getSaveMethod());
-
         Logger.debug('test log entry');
         Logger.debug('another test log entry');
-
         System.assertEquals(0, Limits.getPublishImmediateDml());
-
         Test.startTest();
 
         Logger.saveLog();
+
         System.assertEquals(0, Limits.getPublishImmediateDml());
         System.assertEquals(0, Limits.getQueueableJobs());
         System.assertEquals(0, Limits.getCallouts());
         System.assertEquals(0, Limits.getDmlStatements());
-
         Test.stopTest();
-
         countOfLogEntries = [SELECT COUNT() FROM LogEntry__c];
         System.assertEquals(0, countOfLogEntries);
     }
@@ -528,54 +461,44 @@ private class Logger_Tests {
     static void it_should_save_via_event_bus_when_defaulted() {
         Integer countOfLogEntries = [SELECT COUNT() FROM LogEntry__c];
         System.assertEquals(0, countOfLogEntries);
-
         setUserLoggingLevel(LoggingLevel.DEBUG);
-
-        Logger.getUserSettings().DefaultSaveMethod__c = 'EVENT_BUS';
-
+        Logger.getUserSettings().DefaultSaveMethod__c = Logger.SaveMethod.EVENT_BUS.name();
         System.assertEquals(Logger.SaveMethod.EVENT_BUS, Logger.getSaveMethod());
-
         Logger.debug('test log entry');
         Logger.debug('another test log entry');
-
         System.assertEquals(0, Limits.getPublishImmediateDml());
-
         Test.startTest();
 
         Logger.saveLog();
+
         System.assertEquals(1, Limits.getPublishImmediateDml());
         System.assertEquals(0, Limits.getQueueableJobs());
         System.assertEquals(0, Limits.getCallouts());
         System.assertEquals(0, Limits.getDmlStatements());
-
         Test.stopTest();
-
         countOfLogEntries = [SELECT COUNT() FROM LogEntry__c];
         System.assertEquals(2, countOfLogEntries);
     }
 
     @IsTest
-    static void it_should_save_via_event_bus_when_specified_via_settings() {
+    static void it_should_save_via_event_bus_when_specified_via_saveLog() {
         Integer countOfLogEntries = [SELECT COUNT() FROM LogEntry__c];
         System.assertEquals(0, countOfLogEntries);
-
         setUserLoggingLevel(LoggingLevel.DEBUG);
-
+        Logger.getUserSettings().DefaultSaveMethod__c = Logger.SaveMethod.QUEUEABLE.name();
+        System.assertEquals(Logger.SaveMethod.QUEUEABLE, Logger.getSaveMethod());
         Logger.debug('test log entry');
         Logger.debug('another test log entry');
-
         System.assertEquals(0, Limits.getPublishImmediateDml());
-
         Test.startTest();
 
         Logger.saveLog(Logger.SaveMethod.EVENT_BUS);
+
         System.assertEquals(1, Limits.getPublishImmediateDml());
         System.assertEquals(0, Limits.getQueueableJobs());
         System.assertEquals(0, Limits.getCallouts());
         System.assertEquals(0, Limits.getDmlStatements());
-
         Test.stopTest();
-
         countOfLogEntries = [SELECT COUNT() FROM LogEntry__c];
         System.assertEquals(2, countOfLogEntries);
     }
@@ -1082,18 +1005,13 @@ private class Logger_Tests {
 
     // Start ERROR methods for LogMessage
     @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_successful_deleteResult() {
+    static void it_should_add_an_error_entry_for_logMessage_with_deleteResult() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         Database.DeleteResult deleteResult = LoggerMockDataCreator.createDatabaseDeleteResult(true);
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), deleteResult);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1106,26 +1024,116 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_failed_deleteResult() {
+    static void it_should_add_an_error_entry_for_logMessage_with_mergeResult() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
+        Database.MergeResult mergeResult = LoggerMockDataCreator.createDatabaseMergeResult(true);
 
-        Database.DeleteResult deleteResult = LoggerMockDataCreator.createDatabaseDeleteResult(false);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), deleteResult);
-
-        Test.stopTest();
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), mergeResult);
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
         System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(deleteResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(mergeResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
         System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(deleteResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.DeleteResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
+        System.assertEquals(JSON.serializePretty(mergeResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
+        System.assertEquals(Database.MergeResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_saveResult() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        Database.SaveResult saveResult = LoggerMockDataCreator.createDatabaseSaveResult(true);
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), saveResult);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(saveResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(JSON.serializePretty(saveResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
+        System.assertEquals(Database.SaveResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_undeleteResult() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        Database.UndeleteResult undeleteResult = LoggerMockDataCreator.createDatabaseUndeleteResult(true);
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), undeleteResult);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(undeleteResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(JSON.serializePretty(undeleteResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
+        System.assertEquals(Database.UndeleteResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_upsertResult_when_insert() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(true, true);
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), upsertResult);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(upsertResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(JSON.serializePretty(upsertResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
+        System.assertEquals(Database.UpsertResult.class.getName() + '.Insert', entryBuilder.getLogEntryEvent().DatabaseResultType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_upsertResult_when_update() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(true, false);
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), upsertResult);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(upsertResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(JSON.serializePretty(upsertResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
+        System.assertEquals(Database.UpsertResult.class.getName() + '.Update', entryBuilder.getLogEntryEvent().DatabaseResultType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_mergeResultList() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        List<Database.MergeResult> mergeResults = getMergeResultList();
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), mergeResults);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(JSON.serializePretty(mergeResults), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
+        System.assertEquals(Database.MergeResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
         System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
     }
 
@@ -1134,14 +1142,9 @@ private class Logger_Tests {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         List<Database.DeleteResult> deleteResults = getDeleteResultList();
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), deleteResults);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1154,66 +1157,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_successful_saveResult() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.SaveResult saveResult = LoggerMockDataCreator.createDatabaseSaveResult(true);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), saveResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(saveResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(saveResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.SaveResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_failed_saveResult() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.SaveResult saveResult = LoggerMockDataCreator.createDatabaseSaveResult(false);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), saveResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(saveResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(saveResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.SaveResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
     static void it_should_add_an_error_entry_for_logMessage_with_saveResultList() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         List<Database.SaveResult> saveResults = getSaveResultList();
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), saveResults);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1226,66 +1176,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_successful_undeleteResult() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UndeleteResult undeleteResult = LoggerMockDataCreator.createDatabaseUndeleteResult(true);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), undeleteResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(undeleteResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(undeleteResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UndeleteResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_failed_undeleteResult() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UndeleteResult undeleteResult = LoggerMockDataCreator.createDatabaseUndeleteResult(true);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), undeleteResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(undeleteResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(undeleteResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UndeleteResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
     static void it_should_add_an_error_entry_for_logMessage_with_undeleteResultList() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         List<Database.UndeleteResult> undeleteResults = getUndeleteResultList();
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), undeleteResults);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1298,114 +1195,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_successful_upsertResult_when_insert() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(true, true);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), upsertResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(upsertResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(upsertResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UpsertResult.class.getName() + '.Insert', entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_failed_upsertResult_when_insert() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(false, true);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), upsertResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(upsertResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(upsertResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UpsertResult.class.getName() + '.Insert', entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_successful_upsertResult_when_update() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(true, false);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), upsertResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(upsertResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(upsertResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UpsertResult.class.getName() + '.Update', entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_failed_upsertResult_when_update() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(false, false);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), upsertResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(upsertResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(upsertResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UpsertResult.class.getName() + '.Update', entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
     static void it_should_add_an_error_entry_for_logMessage_with_upsertResultList() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         List<Database.UpsertResult> upsertResults = getUpsertResultList();
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), upsertResults);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1423,11 +1219,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), getException());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1445,11 +1237,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), getRecord().Id, getException());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1467,11 +1255,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), getRecord().Id);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1489,11 +1273,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), getRecord(), getException());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1511,11 +1291,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), getRecord());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1528,17 +1304,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_recordList_and_exception() {
+    static void it_should_add_an_error_entry_for_logMessage_with_record_list_and_exception() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         List<User> users = [SELECT Id, Name, Username, IsActive FROM User LIMIT 5];
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), users, getException());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1551,17 +1323,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_logMessage_with_recordList() {
+    static void it_should_add_an_error_entry_for_logMessage_with_record_list() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         List<User> users = [SELECT Id, Name, Username, IsActive FROM User LIMIT 5];
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), users);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1574,16 +1342,124 @@ private class Logger_Tests {
     }
 
     @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_record_map_and_exception() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+
+        Map<Id, SObject> userIdToUser = new Map<Id, SObject>([SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), userIdToUser, getException());
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(getException().getMessage(), entryBuilder.getLogEntryEvent().ExceptionMessage__c);
+        System.assertEquals(getException().getTypeName(), entryBuilder.getLogEntryEvent().ExceptionType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_record_map() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+
+        Map<Id, SObject> userIdToUser = new Map<Id, SObject>([SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), userIdToUser);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionMessage__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_record_set_and_exception() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+
+        Set<SObject> userIdToUser = new Set<SObject>((List<SObject>) [SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), userIdToUser, getException());
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(getException().getMessage(), entryBuilder.getLogEntryEvent().ExceptionMessage__c);
+        System.assertEquals(getException().getTypeName(), entryBuilder.getLogEntryEvent().ExceptionType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_record_set() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+
+        Set<SObject> userIdToUser = new Set<SObject>((List<SObject>) [SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), userIdToUser);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionMessage__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_http_request() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        HttpRequest request = LoggerMockDataCreator.createHttpRequest();
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage(), request);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getLogMessage().getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(request.getBody(), entryBuilder.getLogEntryEvent().HttpRequestBody__c);
+        System.assertEquals(request.getCompressed(), entryBuilder.getLogEntryEvent().HttpRequestCompressed__c);
+        System.assertEquals(request.getEndpoint(), entryBuilder.getLogEntryEvent().HttpRequestEndpoint__c);
+        System.assertEquals(request.getMethod(), entryBuilder.getLogEntryEvent().HttpRequestMethod__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_logMessage_with_http_response() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        HttpResponse response = LoggerMockDataCreator.createHttpResponse();
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), response);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(response.getBody(), entryBuilder.getLogEntryEvent().HttpResponseBody__c);
+        System.assertEquals(String.join(response.getHeaderKeys(), '\n'), entryBuilder.getLogEntryEvent().HttpResponseHeaderKeys__c);
+        System.assertEquals(response.getStatus(), entryBuilder.getLogEntryEvent().HttpResponseStatus__c);
+        System.assertEquals(response.getStatusCode(), entryBuilder.getLogEntryEvent().HttpResponseStatusCode__c);
+    }
+
+    @IsTest
     static void it_should_add_an_error_entry_for_logMessage() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getLogMessage());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1598,18 +1474,13 @@ private class Logger_Tests {
 
     // Start ERROR methods for String
     @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_successful_deleteResult() {
+    static void it_should_add_an_error_entry_for_string_message_with_deleteResult() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         Database.DeleteResult deleteResult = LoggerMockDataCreator.createDatabaseDeleteResult(true);
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), deleteResult);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1622,42 +1493,32 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_failed_deleteResult() {
+    static void it_should_add_an_error_entry_for_string_message_with_mergeResult() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
+        Database.MergeResult mergeResult = LoggerMockDataCreator.createDatabaseMergeResult(true);
 
-        Database.DeleteResult deleteResult = LoggerMockDataCreator.createDatabaseDeleteResult(false);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), deleteResult);
-
-        Test.stopTest();
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), mergeResult);
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
         System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(deleteResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(mergeResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
         System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(deleteResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.DeleteResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
+        System.assertEquals(JSON.serializePretty(mergeResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
+        System.assertEquals(Database.MergeResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
         System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_successful_saveResult() {
+    static void it_should_add_an_error_entry_for_string_message_with_saveResult() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         Database.SaveResult saveResult = LoggerMockDataCreator.createDatabaseSaveResult(true);
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), saveResult);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1670,42 +1531,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_failed_saveResult() {
+    static void it_should_add_an_error_entry_for_string_message_with_undeleteResult() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
-        Database.SaveResult saveResult = LoggerMockDataCreator.createDatabaseSaveResult(false);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), saveResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(saveResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(saveResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.SaveResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_successful_undeleteResult() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
         Database.UndeleteResult undeleteResult = LoggerMockDataCreator.createDatabaseUndeleteResult(true);
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), undeleteResult);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1718,42 +1550,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_failed_undeleteResult() {
+    static void it_should_add_an_error_entry_for_string_message_with_upsertResult_when_insert() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UndeleteResult undeleteResult = LoggerMockDataCreator.createDatabaseUndeleteResult(true);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), undeleteResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(undeleteResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(undeleteResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UndeleteResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_successful_upsertResult_when_insert() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
         Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(true, true);
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), upsertResult);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1766,66 +1569,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_failed_upsertResult_when_insert() {
+    static void it_should_add_an_error_entry_for_string_message_with_upsertResult_when_update() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(false, true);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), upsertResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(upsertResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(upsertResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UpsertResult.class.getName() + '.Insert', entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_successful_upsertResult_when_update() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
         Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(true, false);
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), upsertResult);
-
-        Test.stopTest();
-
-        System.assertEquals(1, Logger.getBufferSize());
-        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
-        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
-        System.assertEquals(upsertResult.getId(), entryBuilder.getLogEntryEvent().RecordId__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
-        System.assertEquals(JSON.serializePretty(upsertResult), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
-        System.assertEquals(Database.UpsertResult.class.getName() + '.Update', entryBuilder.getLogEntryEvent().DatabaseResultType__c);
-        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
-    }
-
-    @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_failed_upsertResult_when_update() {
-        LoggingLevel loggingLevel = LoggingLevel.ERROR;
-        setUserLoggingLevel(loggingLevel);
-        System.assertEquals(0, Logger.getBufferSize());
-
-        Database.UpsertResult upsertResult = LoggerMockDataCreator.createDatabaseUpsertResult(false, false);
-
-        Test.startTest();
-
-        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), upsertResult);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1842,14 +1592,9 @@ private class Logger_Tests {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         List<Database.DeleteResult> deleteResults = getDeleteResultList();
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), deleteResults);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1862,18 +1607,32 @@ private class Logger_Tests {
     }
 
     @IsTest
+    static void it_should_add_an_error_entry_for_string_message_with_mergeResultList() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        List<Database.MergeResult> mergeResults = getMergeResultList();
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), mergeResults);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(JSON.serializePretty(mergeResults), entryBuilder.getLogEntryEvent().DatabaseResultJson__c);
+        System.assertEquals(Database.MergeResult.class.getName(), entryBuilder.getLogEntryEvent().DatabaseResultType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
     static void it_should_add_an_error_entry_for_string_message_with_saveResultList() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         List<Database.SaveResult> saveResults = getSaveResultList();
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), saveResults);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1890,14 +1649,9 @@ private class Logger_Tests {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         List<Database.UndeleteResult> undeleteResults = getUndeleteResultList();
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), undeleteResults);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1914,14 +1668,9 @@ private class Logger_Tests {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
-
         List<Database.UpsertResult> upsertResults = getUpsertResultList();
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), upsertResults);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1939,11 +1688,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), getException());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1961,11 +1706,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), getRecord().Id, getException());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -1983,11 +1724,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), getRecord().Id);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -2005,11 +1742,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), getRecord(), getException());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -2027,11 +1760,7 @@ private class Logger_Tests {
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), getRecord());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -2044,17 +1773,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_recordList_and_exception() {
+    static void it_should_add_an_error_entry_for_string_message_with_record_list_and_exception() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         List<User> users = [SELECT Id, Name, Username, IsActive FROM User LIMIT 5];
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), users, getException());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -2067,17 +1792,13 @@ private class Logger_Tests {
     }
 
     @IsTest
-    static void it_should_add_an_error_entry_for_string_message_with_recordList() {
+    static void it_should_add_an_error_entry_for_string_message_with_record_list() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         List<User> users = [SELECT Id, Name, Username, IsActive FROM User LIMIT 5];
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), users);
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -2090,16 +1811,124 @@ private class Logger_Tests {
     }
 
     @IsTest
+    static void it_should_add_an_error_entry_for_string_message_with_record_map_and_exception() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+
+        Map<Id, SObject> userIdToUser = new Map<Id, SObject>([SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), userIdToUser, getException());
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(getException().getMessage(), entryBuilder.getLogEntryEvent().ExceptionMessage__c);
+        System.assertEquals(getException().getTypeName(), entryBuilder.getLogEntryEvent().ExceptionType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_string_message_with_record_map() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+
+        Map<Id, SObject> userIdToUser = new Map<Id, SObject>([SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), userIdToUser);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionMessage__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_string_message_with_record_set_and_exception() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+
+        Set<SObject> userIdToUser = new Set<SObject>((List<SObject>) [SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), userIdToUser, getException());
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(getException().getMessage(), entryBuilder.getLogEntryEvent().ExceptionMessage__c);
+        System.assertEquals(getException().getTypeName(), entryBuilder.getLogEntryEvent().ExceptionType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_string_message_with_record_set() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+
+        Set<SObject> userIdToUser = new Set<SObject>((List<SObject>) [SELECT Id, Name, Username, IsActive FROM User LIMIT 5]);
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), userIdToUser);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().RecordId__c);
+        System.assertEquals(JSON.serializePretty(userIdToUser), entryBuilder.getLogEntryEvent().RecordJson__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionMessage__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionType__c);
+        System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_string_message_with_http_request() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        HttpRequest request = LoggerMockDataCreator.createHttpRequest();
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), request);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(request.getBody(), entryBuilder.getLogEntryEvent().HttpRequestBody__c);
+        System.assertEquals(request.getCompressed(), entryBuilder.getLogEntryEvent().HttpRequestCompressed__c);
+        System.assertEquals(request.getEndpoint(), entryBuilder.getLogEntryEvent().HttpRequestEndpoint__c);
+        System.assertEquals(request.getMethod(), entryBuilder.getLogEntryEvent().HttpRequestMethod__c);
+    }
+
+    @IsTest
+    static void it_should_add_an_error_entry_for_string_message_with_http_response() {
+        LoggingLevel loggingLevel = LoggingLevel.ERROR;
+        setUserLoggingLevel(loggingLevel);
+        System.assertEquals(0, Logger.getBufferSize());
+        HttpResponse response = LoggerMockDataCreator.createHttpResponse();
+
+        LogEntryEventBuilder entryBuilder = Logger.error(getMessage(), response);
+
+        System.assertEquals(1, Logger.getBufferSize());
+        System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
+        System.assertEquals(getMessage(), entryBuilder.getLogEntryEvent().Message__c);
+        System.assertEquals(response.getBody(), entryBuilder.getLogEntryEvent().HttpResponseBody__c);
+        System.assertEquals(String.join(response.getHeaderKeys(), '\n'), entryBuilder.getLogEntryEvent().HttpResponseHeaderKeys__c);
+        System.assertEquals(response.getStatus(), entryBuilder.getLogEntryEvent().HttpResponseStatus__c);
+        System.assertEquals(response.getStatusCode(), entryBuilder.getLogEntryEvent().HttpResponseStatusCode__c);
+    }
+
+    @IsTest
     static void it_should_add_an_error_entry_for_string_message() {
         LoggingLevel loggingLevel = LoggingLevel.ERROR;
         setUserLoggingLevel(loggingLevel);
         System.assertEquals(0, Logger.getBufferSize());
 
-        Test.startTest();
-
         LogEntryEventBuilder entryBuilder = Logger.error(getMessage());
-
-        Test.stopTest();
 
         System.assertEquals(1, Logger.getBufferSize());
         System.assertEquals(loggingLevel.name(), entryBuilder.getLogEntryEvent().LoggingLevel__c);
@@ -2110,6 +1939,7 @@ private class Logger_Tests {
         System.assertEquals(null, entryBuilder.getLogEntryEvent().ExceptionType__c);
         System.assertEquals(null, entryBuilder.getLogEntryEvent().Tags__c);
     }
+    // End ERROR methods for String
 
     // Start WARN methods for LogMessage
     @IsTest
@@ -6236,8 +6066,13 @@ private class Logger_Tests {
         return deleteResults;
     }
 
-    // TODO only some standard objects can be merged - need to find a way to either mock or trigger a merge result that works in all orgs
-    // static Database.MergeResult getMergeResult(Boolean isSuccess) { }
+    static List<Database.MergeResult> getMergeResultList() {
+        List<Database.MergeResult> mergeResults = new List<Database.MergeResult>();
+        for (Integer i = 0; i < 3; i++) {
+            mergeResults.add(LoggerMockDataCreator.createDatabaseMergeResult(true));
+        }
+        return mergeResults;
+    }
 
     static List<Database.SaveResult> getSaveResultList() {
         List<Database.SaveResult> saveResults = new List<Database.SaveResult>();

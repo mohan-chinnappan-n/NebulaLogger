@@ -562,7 +562,7 @@ global with sharing class LogEntryEventBuilder {
     /**
      * @description Sets the log entry event's HTTP Request fields
      * @param  request The instance of `HttpRequest` to log
-     * @return              The same instance of `LogEntryEventBuilder`, useful for chaining methods
+     * @return         The same instance of `LogEntryEventBuilder`, useful for chaining methods
      */
     global LogEntryEventBuilder setHttpRequestDetails(HttpRequest request) {
         if (this.shouldSave == false || request == null) {

@@ -893,11 +893,7 @@ private class LogEntryEventBuilder_Tests {
         System.assertEquals(null, builder.getLogEntryEvent().HttpRequestBody__c);
         System.assertEquals(null, builder.getLogEntryEvent().HttpRequestEndpoint__c);
         System.assertEquals(null, builder.getLogEntryEvent().HttpRequestMethod__c);
-        HttpRequest request = new HttpRequest();
-        request.setBody('Hello, world!');
-        request.setCompressed(true);
-        request.setEndpoint('https://fake.salesforce.com');
-        request.setMethod('GET');
+        HttpRequest request = LoggerMockDataCreator.createHttpRequest();
 
         builder.setHttpRequestDetails(request);
 
@@ -929,12 +925,7 @@ private class LogEntryEventBuilder_Tests {
         System.assertEquals(null, builder.getLogEntryEvent().HttpRequestBody__c);
         System.assertEquals(null, builder.getLogEntryEvent().HttpRequestEndpoint__c);
         System.assertEquals(null, builder.getLogEntryEvent().HttpRequestMethod__c);
-        HttpResponse response = new HttpResponse();
-        response.setBody('Hello, world!');
-        response.setHeader('someKey', 'some string value');
-        response.setHeader('anotherKey', 'an amazing example value, wow');
-        response.setStatus('STATUS_GOOD_JOB_YOU_DID_IT');
-        response.setStatusCode(201);
+        HttpResponse response = LoggerMockDataCreator.createHttpResponse();
 
         builder.setHttpResponseDetails(response);
 
